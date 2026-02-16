@@ -14,18 +14,14 @@ Perfect for debugging scripts, monitoring loops, and inspecting complex nested d
 
 ## 📦 Installation
 
-### Via uv (Recommended)
-```bash
-uv add dictscope
-```
-or
-```bash
-uv add git+https://github.com/Zidrax/dictscope.git
-```
-
 ### Via pip
 ```Bash
 pip install dictscope
+```
+
+### Via uv
+```bash
+uv add dictscope
 ```
 
 ### 🚀 Usage
@@ -52,7 +48,7 @@ for i in range(100):
     time.sleep(0.1)
 ```
 
-⏸ Controls
+### ⏸ Controls
 
 Pause/Resume: Click the button in the top right corner to freeze the data stream and inspect the current state.
 

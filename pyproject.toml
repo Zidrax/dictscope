@@ -1,6 +1,6 @@
 [project]
 name = "dictscope"
-version = "0.1.0"
+version = "0.1.1"
 description = "Universal dictionary visualizer for Python"
 readme = "README.md"
 authors = [
@@ -13,5 +13,7 @@ dependencies = []
 requires = ["uv_build>=0.9.18,<0.10.0"]
 build-backend = "uv_build"
 
-[tool.hatch.build.targets.wheel.force-include]
-"src/dictscope/index.html" = "dictscope/index.html"
+[dependency-groups]
+dev = [
+    "black>=25.11.0",
+]
