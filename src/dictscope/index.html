@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>DictScope</title>
+    <style>
+        :root { --bg: #1e1e2e; --card: #313244; --text: #cdd6f4; --key: #89b4fa; --str: #a6e3a1; --num: #fab387; --bool: #f38ba8; --acc: #cba6f7; }
+        body { font-family: monospace; background: var(--bg); color: var(--text); padding: 20px; font-size: 18px; }
+        .header { display: flex; justify-content: space-between; margin-bottom: 20px; border-bottom: 2px solid var(--card); padding-bottom: 10px; }
+        button { background: var(--card); color: var(--text); border: 2px solid var(--acc); padding: 10px 20px; font-weight: bold; cursor: pointer; border-radius: 5px; }
+        button.paused { background: var(--bool); color: var(--bg); border-color: var(--bool); }
+        #viewer { background: var(--card); padding: 20px; border-radius: 10px; overflow-x: auto; }
+        ul { list-style: none; padding-left: 20px; border-left: 1px solid #45475a; margin: 5px 0; }
+        .collapser { cursor: pointer; color: #6c7086; font-weight: bold; display: inline-block; width: 15px; }
+        .collapsed > ul { display: none; }
+        .collapsed > .collapser { transform: rotate(-90deg); }
+        .key { color: var(--key); font-weight: bold; } .str { color: var(--str); } .num { color: var(--num); } .bool { color: var(--bool); font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 style="margin:0; color:var(--acc)">🔭 DictScope</h1>
+        <button id="p-btn" onclick="toggle()">PAUSE ||</button>
+    </div>
+    <div id="viewer">Wait...</div>
+    <script>
+        let p = false;
+        function toggle() { p=!p; document.getElementById('p-btn').innerText=p?"RESUME ▶":"PAUSE ||"; document.getElementById('p-btn').classList.toggle('paused'); }
+        function tree(o) {
+            if(o===null) return '<span style="color:#9399b2">None</span>';
+            if(typeof o!=='object') return `<span class="${typeof o==='string'?'str':typeof o==='number'?'num':'bool'}">${typeof o==='string'?'"'+o+'"':o}</span>`;
+            let k=Object.keys(o), isArr=Array.isArray(o);
+            if(!k.length) return isArr?'[]':'{}';
+            let h=`<span>${isArr?'[':'{'}</span><ul>`;
+            k.forEach((x,i)=>{
+                h+=`<li><span class="collapser" onclick="this.parentElement.classList.toggle('collapsed')">▼</span>` +
+                (isArr?'':`<span class="key">"${x}":</span> `) + tree(o[x]) + (i<k.length-1?',':'') + `</li>`;
+            });
+            return h + `</ul><span>${isArr?']':'}'}</span>`;
+        }
+        setInterval(async()=>{ if(!p) try{ document.getElementById('viewer').innerHTML=tree(await(await fetch('/data')).json()); }catch(e){} }, 200);
+    </script>
+</body>
+</html>
